@@ -50,21 +50,8 @@ class ControllerExtensionPaymentApurata extends Controller {
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true);
 
-		$this->load->model('localisation/language');
 
 		$data['payment_apurata'] = array();
-
-		$languages = $this->model_localisation_language->getLanguages();
-		
-		foreach ($languages as $language) {
-			if (isset($this->request->post['payment_apurata_instructions' . $language['language_id']])) {
-				$data['payment_apurata_instructions'][$language['language_id']] = $this->request->post['payment_apurata_instructions' . $language['language_id']];
-			} else {
-				$data['payment_apurata_instructions'][$language['language_id']] = $this->config->get('payment_apurata_instructions' . $language['language_id']);
-			}
-		}
-
-		$data['languages'] = $languages;
 
 		if (isset($this->request->post['payment_apurata_client_id'])) {
 				$data['payment_apurata_client_id'] = $this->request->post['payment_apurata_client_id'];
