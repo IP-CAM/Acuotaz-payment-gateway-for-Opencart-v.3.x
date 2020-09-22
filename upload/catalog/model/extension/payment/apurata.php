@@ -34,7 +34,7 @@ class ModelExtensionPaymentApurata extends Model {
 			return true;
 		}
 
-		if ($this->session->data['currency'] != 'PEN') {
+		if ($this->session->data['currency'] != $this->language->get('apurata_currency')) {
 			return true;
 		}
 

@@ -2,8 +2,6 @@
 class ControllerExtensionPaymentApurata extends Controller {
 	public function index() {
 		$this->load->language('extension/payment/apurata');
-		
-		$data['bank'] = nl2br($this->config->get('payment_apurata_instructions' . $this->config->get('config_language_id')));
 
 		return $this->load->view('extension/payment/apurata', $data);
 	}
