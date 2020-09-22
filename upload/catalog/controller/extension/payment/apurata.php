@@ -20,7 +20,7 @@ class ControllerExtensionPaymentApurata extends Controller {
 
 			$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 			
-			$apurata_new_order_url = $this->language->get('apurata_api_domain');
+			$apurata_new_order_url = $this->language->get('apurata_front_domain');
 			
 			if ($order_info) {
 				$apurata_new_order_url .= '/pos/crear-orden-y-continuar?' .
