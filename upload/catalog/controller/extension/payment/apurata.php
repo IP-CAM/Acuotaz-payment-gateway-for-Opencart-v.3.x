@@ -3,6 +3,8 @@ class ControllerExtensionPaymentApurata extends Controller {
 	public function index() {
 		$this->load->language('extension/payment/apurata');
 
+		$data['apurata'] = 'apurata';
+
 		return $this->load->view('extension/payment/apurata', $data);
 	}
 
@@ -14,9 +16,7 @@ class ControllerExtensionPaymentApurata extends Controller {
 
 			$this->load->model('checkout/order');
 
-			$comment  = $this->language->get('text_instruction') . "\n\n";
-			$comment .= $this->config->get('payment_bank_transfer_bank' . $this->config->get('config_language_id')) . "\n\n";
-			$comment .= $this->language->get('text_payment');
+			$comment  = "Orden creada con aCuotaz Apurata";
 
 			$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 			
@@ -47,7 +47,7 @@ class ControllerExtensionPaymentApurata extends Controller {
 				'&customer_data__shipping_city=' . urlencode($order_info['shipping_city']) ;
 			}
 
-			$this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('payment_bank_transfer_order_status_id'), $comment, true);
+			$this->model_checkout_order->addOrderHistory($this->session->data['order_id'], '1', $comment, true);
 		
 			$json['redirect'] = $apurata_new_order_url;
 		}
