@@ -78,25 +78,35 @@ class ControllerExtensionPaymentApurata extends Controller {
 	public function handle_event() {
 
 		// Check Authorization
-		$auth = getallheaders()['Apurata-Auth'];
-		if (!$auth) {
+
+		if (!array_key_exists('Apurata-Auth', getallheaders())) {
 			http_response_code(401);
-			return;
+			die('Missing authorization header');
 		}
+
+		$auth = getallheaders()['Apurata-Auth'];
+
 		list($auth_type, $token) = explode(' ', $auth);
+		
 		if (strtolower($auth_type) != 'bearer'){
 			http_response_code(401);
-			return;
+			die('Invalid authorization type');
 		}
 		if ($token != $this->config->get('payment_apurata_client_secret')) {
 			http_response_code(401);
-			return;
+			die('Invalid authorization token');
 		}
 
+		$this->load->model('checkout/order');
 
 		$json = array();
 		
 		if (isset($this->request->post['order_id']) && isset($this->request->post['event'])) {
+
+			if (!$this->model_checkout_order->getOrder($this->request->post['order_id'])) {
+				die('Order not found');
+			}
+
 			$order_id = $this->request->post['order_id'];
 			
 			$event = $this->request->post['event'];
@@ -123,10 +133,10 @@ class ControllerExtensionPaymentApurata extends Controller {
 					$comment = 'El financiamiento en Apurata fue cancelado';
 					break;
 				default:
-					die('Evento no soportado');
+					die('Unsupported event');
 			}
 		} else {
-			die('Acceso ilegal');
+			die('Illegal Access');
 		}
 
 		$this->model_checkout_order->addOrderHistory($order_id, $new_order_status, $comment, true);
