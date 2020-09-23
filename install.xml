@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<modification>
+	<name>Apurata Add-On</name>
+	<code>apurata-add-On</code>
+	<version>0.1</version>
+	<author>Rodrigo Pulcha</author>
+	<link>https://apurata.com</link>
+
+	<file path="system/library/template/twig.php" error="skip" info="fix Core Opencart twig files modification">
+		<operation>
+			<search><![CDATA[$file = DIR_TEMPLATE . $filename . '.twig';]]></search>
+			<add position="replace"><![CDATA[$file = modification( DIR_TEMPLATE . $filename . '.twig' );
+			if( class_exists('VQMod') ) {
+				$file = \VQMod::modCheck($file);
+			}
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/view/theme/*/template/common/cart.twig">
+		<operation>
+			<search><![CDATA[<a href="{{ cart }}"><strong><i class="fa fa-shopping-cart"></i> {{ text_cart }}</strong></a>&nbsp;&nbsp;&nbsp;<a href="{{ checkout }}"><strong><i class="fa fa-share"></i> {{ text_checkout }}</strong></a></p>]]></search>
+
+			<add position="after"><![CDATA[
+				<div id="apurata-add-on"></div>
+				<script type="text/javascript">
+					$.get( "index.php?route=extension/payment/apurata/get_add_on" )
+		  				.done(function( data ) {
+							document.getElementById("apurata-add-on").innerHTML +=  data;
+		  				});
+				</script>
+			]]></add>
+		</operation>
+	</file>
+
+	<file path="catalog/view/theme/*/template/checkout/cart.twig">
+		<operation>
+			<search><![CDATA[</form>]]></search>
+
+			<add position="after"><![CDATA[
+				<div id="apurata-add-on-checkout"></div>
+				<script type="text/javascript">
+					$.get( "index.php?route=extension/payment/apurata/get_add_on" )
+		  				.done(function( data ) {
+							document.getElementById("apurata-add-on-checkout").innerHTML +=  data;
+		  				});
+				</script>
+			]]></add>
+		</operation>
+	</file>
+</modification>

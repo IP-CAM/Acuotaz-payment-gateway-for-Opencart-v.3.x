@@ -5,5 +5,5 @@
 PLUGIN_NAME=opencart-apurata-payment-gateway
 
 (
-	zip -r ${PLUGIN_NAME}.ocmod.zip upload/
+	zip -r ${PLUGIN_NAME}.ocmod.zip upload/ install.xml
 )

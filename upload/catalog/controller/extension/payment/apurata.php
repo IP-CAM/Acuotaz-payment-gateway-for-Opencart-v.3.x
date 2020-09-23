@@ -139,4 +139,60 @@ class ControllerExtensionPaymentApurata extends Controller {
 
 		$this->model_checkout_order->addOrderHistory($order_id, $new_order_status, $comment, true);
 	}
+
+	function get_add_on() {
+		$this->load->model('checkout/order');
+		
+		$url = "/pos/pay-with-apurata-add-on/" . $this->cart->getTotal();
+
+		if (array_key_exists('customer_id', $this->session->data) && array_key_exists('order_id', $this->session->data)) {
+			$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+			$url .= '?' .
+				'user__id=' . urlencode((string) $this->session->data['customer_id']) .
+				'&user__email=' . urlencode((string) $order_info['email']) .
+				'&user__first_name=' . urlencode((string) $order_info['payment_firstname']) .
+				'&user__last_name=' . urlencode((string) $order_info['payment_lastname']);
+		}
+
+		list($resp_code, $pay_with_apurata_addon) = $this->make_curl_to_apurata("GET", $url);
+
+		if ($resp_code == 200) {
+			die(str_replace(array("\r", "\n"), '', $pay_with_apurata_addon));
+		} else {
+			die('');
+		}
+	}
+
+	function make_curl_to_apurata($method, $path) {
+		// $method: "GET" or "POST"
+		// $path: e.g. /pos/client/landing_config
+		$ch = curl_init();
+		$this->load->language('extension/payment/apurata');
+
+		$url = $this->language->get('apurata_api_domain') . $path;
+		curl_setopt($ch, CURLOPT_URL, $url);
+
+		// Timeouts
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);    // seconds
+		curl_setopt($ch, CURLOPT_TIMEOUT, 2); // seconds
+
+		$headers = array("Authorization: Bearer " . $this->config->get('payment_apurata_client_secret'));
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+		if (strtoupper($method) == "GET") {
+			curl_setopt($ch, CURLOPT_HTTPGET, TRUE);
+		} else if (strtoupper($method) == "POST") {
+			curl_setopt($ch, CURLOPT_POST, TRUE);
+		} else {
+			throw new Exception("Method not supported: " . $method);
+		}
+		$ret = curl_exec($ch);
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		if ($httpCode != 200) {
+			error_log("Apurata responded with http_code ". $httpCode . " on " . $method . " to " . $url);
+		}
+		curl_close($ch);
+		return array($httpCode, $ret);
+	}
 }
