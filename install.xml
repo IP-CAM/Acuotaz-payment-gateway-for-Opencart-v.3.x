@@ -25,7 +25,7 @@
 			<add position="after"><![CDATA[
 				<div id="apurata-add-on"></div>
 				<script type="text/javascript">
-					$.get( "index.php?route=extension/payment/apurata/get_add_on" )
+					$.get( "index.php?route=extension/payment/apurata/get_cart_add_on" )
 		  				.done(function( data ) {
 							document.getElementById("apurata-add-on").innerHTML +=  data;
 		  				});
@@ -41,7 +41,7 @@
 			<add position="after"><![CDATA[
 				<div id="apurata-add-on-checkout"></div>
 				<script type="text/javascript">
-					$.get( "index.php?route=extension/payment/apurata/get_add_on" )
+					$.get( "index.php?route=extension/payment/apurata/get_cart_add_on" )
 		  				.done(function( data ) {
 							document.getElementById("apurata-add-on-checkout").innerHTML +=  data;
 		  				});
