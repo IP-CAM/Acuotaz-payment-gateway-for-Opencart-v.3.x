@@ -8,9 +8,9 @@ class ControllerExtensionPaymentApurata extends Controller {
 		$custom_statuses = array(
 			'payment_apurata_created_order'   => array('default' => '1', 'custom'  => 'aCuotaz Apurata order created' ),
 			'payment_apurata_onhold_order'    => array('default' => '2', 'custom'  => 'aCuotaz Apurata order onhold' ),
-			'payment_apurata_validated_order' => array('default' => '5', 'custom'  => 'aCuotaz Apurata order validated' ),
-			'payment_apurata_canceled_order'  => array('default' => '10', 'custom' => 'aCuotaz Apurata order canceled' ),
-			'payment_apurata_rejected_order'  => array('default' => '10', 'custom' => 'aCuotaz Apurata order rejected' )
+			'payment_apurata_validated_order' => array('default' => '15', 'custom'  => 'aCuotaz Apurata order validated' ),
+			'payment_apurata_canceled_order'  => array('default' => '7', 'custom' => 'aCuotaz Apurata order canceled' ),
+			'payment_apurata_rejected_order'  => array('default' => '8', 'custom' => 'aCuotaz Apurata order rejected' )
 		);
 
 		$this->load->language('extension/payment/apurata');
@@ -40,7 +40,7 @@ class ControllerExtensionPaymentApurata extends Controller {
 			$this->model_setting_setting->editSetting('payment_apurata', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
-			
+
 			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true));
 		}
 

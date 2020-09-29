@@ -7,6 +7,25 @@
 	<author>Rodrigo Pulcha</author>
 	<link>https://apurata.com</link>
 
+	<file path="catalog/view/theme/fastor/template/common/cart.twig">
+		<operation>
+			<search><![CDATA[<div id="cart_content_ajax">]]></search>
+
+			<add position="after"><![CDATA[
+				<div id="cart_content_ajax">
+				<script type="text/javascript">
+					var apurata_addon_div = document.createElement('div');
+					apurata_addon_div.setAttribute("id", "apurata-add-on");
+					document.getElementById("cart_content_ajax").appendChild(apurata_addon_div);
+					$.get( "index.php?route=extension/payment/apurata/get_cart_add_on" )
+		  				.done(function( data ) {
+							document.getElementById("apurata-add-on").innerHTML +=  data;
+		  				});
+				</script>
+			]]></add>
+		</operation>
+	</file>
+
 	<file path="catalog/view/theme/*/template/common/cart.twig">
 		<operation>
 			<search><![CDATA[<a href="{{ cart }}"><strong><i class="fa fa-shopping-cart"></i> {{ text_cart }}</strong></a>&nbsp;&nbsp;&nbsp;<a href="{{ checkout }}"><strong><i class="fa fa-share"></i> {{ text_checkout }}</strong></a></p>]]></search>
