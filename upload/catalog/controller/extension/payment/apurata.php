@@ -4,7 +4,7 @@ class ControllerExtensionPaymentApurata extends Controller {
 		$this->load->language('extension/payment/apurata');
 
 		$data['apurata'] = 'apurata';
-
+		$this->acuotazLog(array('data' => $data));
 		return $this->load->view('extension/payment/apurata', $data);
 	}
 
@@ -199,5 +199,9 @@ class ControllerExtensionPaymentApurata extends Controller {
 		}
 		curl_close($ch);
 		return array($httpCode, $ret);
+	}
+
+	function acuotazLog($var) {
+		echo "<script>console.log('aCuotaz controller','" . json_encode($var) . "');</script>";
 	}
 }

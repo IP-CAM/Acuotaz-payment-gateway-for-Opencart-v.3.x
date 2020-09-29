@@ -5,6 +5,7 @@ class ModelExtensionPaymentApurata extends Model {
 
 		$method_data = array();
 
+		$this->acuotazLog('amount: ' . $total);
 		if (!$this->should_hide_apurata_gateway($total)) {
 			$method_data = array(
 				'code'       => 'apurata',
@@ -13,7 +14,6 @@ class ModelExtensionPaymentApurata extends Model {
 				'sort_order' => '1'
 			);
 		}
-		
 		return $method_data;
 	}
 
@@ -31,16 +31,19 @@ class ModelExtensionPaymentApurata extends Model {
 		);
 
 		if (!$this->config->get('payment_apurata_allow_http') && !$isHttps) {
+			$this->acuotazLog('Allow HTTP hide payment method');
 			return true;
 		}
 
 		if ($this->session->data['currency'] != $this->language->get('apurata_currency')) {
+			$this->acuotazLog('Currency: ' . $this->session->data['currency'] . ' hide payment method, must be ' . $this->language->get('apurata_currency'));
 			return true;
 		}
 
 		$landing_config = $this->get_landing_config();
 		
 		if (!is_object($landing_config) || (is_object($landing_config) && ($landing_config->min_amount > $total || $landing_config->max_amount < $total))) {
+			$this->acuotazLog('Amount: ' . $total . ' hide payment method');
 			return true;
 		}
 		return false;
@@ -77,11 +80,18 @@ class ModelExtensionPaymentApurata extends Model {
 			throw new Exception("Method not supported: " . $method);
 		}
 		$ret = curl_exec($ch);
+		$this->acuotazLog('Making curl to ' . $url);
 		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		if ($httpCode != 200) {
+			$this->acuotazLog("Apurata responded with http_code ". $httpCode . " on " . $method . " to " . $url);
 			error_log("Apurata responded with http_code ". $httpCode . " on " . $method . " to " . $url);
 		}
 		curl_close($ch);
+		$this->acuotazLog('code: ' . $httpCode . ' | ret: ' . $ret);
 		return array($httpCode, $ret);
+	}
+
+	function acuotazLog($var) {
+		echo "<script>console.log('aCuotaz model','" . json_encode($var) . "');</script>";
 	}
 }
