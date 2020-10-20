@@ -18,11 +18,7 @@ class ModelExtensionPaymentApurata extends Model {
 	}
 
 	function should_hide_apurata_gateway($total) {
-		$isHttps =
-			$_SERVER['HTTPS']
-			?? $_SERVER['REQUEST_SCHEME']
-			?? $_SERVER['HTTP_X_FORWARDED_PROTO']
-			?? null;
+		$isHttps = array_key_exists('HTTPS', $_SERVER)? $_SERVER['HTTPS'] : array_key_exists('REQUEST_SCHEME', $_SERVER)? $_SERVER['REQUEST_SCHEME'] : null;
 
 		$isHttps = $isHttps && (
 			strcasecmp('1', $isHttps) == 0
@@ -52,7 +48,7 @@ class ModelExtensionPaymentApurata extends Model {
 	function get_landing_config() {
 		list ($httpCode, $landing_config) = $this->make_curl_to_apurata("GET", "/pos/client/landing_config");
 		$landing_config = json_decode($landing_config);
-		return $landing_config ?? null;
+		return isset($landing_config)? $landing_config : null;
 	}
 
 	function make_curl_to_apurata($method, $path) {
