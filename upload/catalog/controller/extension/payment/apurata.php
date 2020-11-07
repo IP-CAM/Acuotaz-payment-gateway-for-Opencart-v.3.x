@@ -23,6 +23,10 @@ class ControllerExtensionPaymentApurata extends Controller {
 			$apurata_new_order_url = $this->language->get('apurata_front_domain');
 			
 			if ($order_info) {
+				$customer_id = 'invitado';
+				if (array_key_exists('customer_id', $this->session->data)) {
+					$customer_id = $this->session->data['customer_id'];
+				}
 				$apurata_new_order_url .= '/pos/crear-orden-y-continuar?' .
 				'order_id=' . urlencode($this->session->data['order_id']) .
 				'&pos_client_id=' . urlencode($this->config->get('payment_apurata_client_id')) .
@@ -30,7 +34,7 @@ class ControllerExtensionPaymentApurata extends Controller {
 				'&url_redir_on_canceled=' . urlencode($this->url->link('checkout/checkout')) .
 				'&url_redir_on_rejected=' . urlencode($this->url->link('checkout/checkout')) .
 				'&url_redir_on_success=' . urlencode($this->url->link('checkout/success')) .
-				'&customer_data__customer_id=' . urlencode($this->session->data['customer_id']) .
+				'&customer_data__customer_id=' . urlencode($customer_id) .
 				'&customer_data__billing_company=' . urlencode('') .
 				'&customer_data__shipping_company=' . urlencode('') .
 				'&customer_data__email=' . urlencode($order_info['email']) .
