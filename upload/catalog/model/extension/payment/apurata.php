@@ -11,7 +11,7 @@ class ModelExtensionPaymentApurata extends Model {
 				'code'       => 'apurata',
 				'title'      => $this->language->get('text_title'),
 				'terms'      => '',
-				'sort_order' => '1'
+				'sort_order' => '3'
 			);
 		}
 		return $method_data;

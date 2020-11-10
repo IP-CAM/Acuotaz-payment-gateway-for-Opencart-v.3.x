@@ -11,7 +11,7 @@ class ControllerExtensionPaymentApurata extends Controller {
 	public function confirm() {
 		$json = array();
 		
-		if ($this->session->data['payment_method']['code'] == 'apurata') {
+		if ($this->session->data['payment_method']['code'] == 'acuotaz_apurata') {
 			$this->load->language('extension/payment/apurata');
 
 			$this->load->model('checkout/order');
