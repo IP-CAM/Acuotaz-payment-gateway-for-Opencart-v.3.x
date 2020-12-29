@@ -7,6 +7,17 @@
 	<author>Rodrigo Pulcha</author>
 	<link>https://apurata.com</link>
 
+	<file path="system/library/template/twig.php" error="skip" info="fix Core Opencart twig files modification">
+		<operation>
+			<search><![CDATA[$file = DIR_TEMPLATE . $filename . '.twig';]]></search>
+			<add position="replace"><![CDATA[$file = modification( DIR_TEMPLATE . $filename . '.twig' );
+			if( class_exists('VQMod') ) {
+				$file = \VQMod::modCheck($file);
+			}
+			]]></add>
+		</operation>
+	</file>
+
 	<file path="catalog/view/theme/fastor/template/common/cart.twig">
 		<operation>
 			<search><![CDATA[<div id="cart_content_ajax">]]></search>
