@@ -162,6 +162,9 @@ class ControllerExtensionPaymentApurata extends Controller {
 				'&user__first_name=' . urlencode((string) $order_info['payment_firstname']) .
 				'&user__last_name=' . urlencode((string) $order_info['payment_lastname']);
 		}
+		if ($this->cart->countProducts() > 1) {
+			$url .= '&multiple_products=' . urlencode('TRUE');
+		}
 
 		list($resp_code, $pay_with_apurata_addon) = $this->make_curl_to_apurata("GET", $url);
 
